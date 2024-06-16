@@ -25,7 +25,7 @@ namespace Tanks
         public Tank(Controll controll)
         {
             this.controll = controll;
-            this.position = new Position()
+            this.position = new Position(new Rect(0, 0, 1200, 900))
             {
                 X = 40,
                 Y = 40
