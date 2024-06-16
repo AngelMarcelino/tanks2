@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tanks.Physics
 {
-    internal enum Direction
+    internal enum Orientation
     {
-        Up, Down, Left, Right
+        Vertical,
+        Horizontal
     }
 }

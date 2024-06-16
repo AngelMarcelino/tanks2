@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tanks.Physics
 {
-    internal enum Direction
+    internal class Position
     {
-        Up, Down, Left, Right
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 }
