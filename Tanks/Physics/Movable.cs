@@ -12,12 +12,12 @@ namespace Tanks.Physics
     internal class Movable
     {
         private Position position;
-        public double Acceleration { get; set; } = 30;
-        public double BrakingSpeed { get; set; } = 300;
-        public double Friction { get; set; } = 50;
-        public double BaseSpeed { get; set; } = 20;
-        public double MaxSpeed { get; set; }
-        public double MinSpeed { get; set; }
+        public double Acceleration { get; set; } = 4800;
+        public double BrakingSpeed { get; set; } = 4800;
+        public double Friction { get; set; } = 4000;
+        public double BaseSpeed { get; set; } = 720;
+        public double MaxSpeed { get => BaseSpeed; }
+        public double MinSpeed { get => -BaseSpeed; }
 
         private double _xSpeed = 0;
         private double _ySpeed = 0;
@@ -30,8 +30,6 @@ namespace Tanks.Physics
         public Movable(Position position)
         {
             this.position = position;
-            MaxSpeed = BaseSpeed;
-            MinSpeed = -BaseSpeed;
         }
 
         public double XSpeed
@@ -92,9 +90,19 @@ namespace Tanks.Physics
             return _speed;
         }
 
+        public void UpdateState(bool up, bool down, bool left, bool right)
+        {
+            UpdateSpeed(up, down, left, right);
+            UpdatePosition();
+        }
 
+        public void UpdateState()
+        {
+            UpdateSpeed(false, false, false, false);
+            UpdatePosition();
+        }
 
-        public void UpdateSpeed(bool up, bool down, bool left, bool right)
+        private void UpdateSpeed(bool up, bool down, bool left, bool right)
         {
             double deltaX = 0;
             double deltaY = 0;
@@ -168,13 +176,13 @@ namespace Tanks.Physics
             }
         }
 
-        public void UpdatePosition()
+        private void UpdatePosition()
         {
             double deltaX = XSpeed;
             double deltaY = YSpeed;
 
-            position.X += deltaX;
-            position.Y += deltaY;
+            position.X += deltaX * GlobalTimer.ElapsedTimeInSeconds;
+            position.Y += deltaY * GlobalTimer.ElapsedTimeInSeconds;
         }
     }
 }

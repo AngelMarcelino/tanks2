@@ -11,8 +11,8 @@ namespace Tanks.Controlls
     {
         public ControllSet()
         {
-            Controlls1 = new Controll(new KeyBindings());
-            Controlls2 = new Controll(new KeyBindings());
+            Controlls1 = new Controll(new KeyBindings(KeyBindings.GetDefaultControlsPlayer1()));
+            Controlls2 = new Controll(new KeyBindings(KeyBindings.GetDefaultControlsPlayer2()));
         }
         public Controll Controlls1 { get; private set; }
         public Controll Controlls2 { get; private set; }

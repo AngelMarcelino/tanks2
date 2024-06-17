@@ -22,28 +22,74 @@ namespace Tanks
         public double Widht { get; set; } = 40;
         public double Height { get; set; } = 40;
 
-        public Tank(Controll controll)
+        public int FireRateInRoundsPerMinute { get; set; } = 300;
+
+        public double RoundsPerSecond { get => FireRateInRoundsPerMinute / 60; }
+
+        public double TimeBetweenRounds { get => 1 / RoundsPerSecond;  }
+
+        private double LastFire = 0;
+
+        private const double ProjectileSpeed = 500;
+
+        private Action<Projectile> createProjectile;
+
+        public Tank(Controll controll, Rect space, Action<Projectile> createProjectile)
         {
             this.controll = controll;
-            this.position = new Position(new Rect(0, 0, 1200, 900))
+            this.position = new Position(space)
             {
                 X = 40,
                 Y = 40
             };
             this.movable = new Movable(position);
+            this.createProjectile = createProjectile;
         }
 
         private Controll controll;
 
         public void UpdateState()
         {
-            movable.UpdateSpeed(
+            movable.UpdateState(
                 controll.GetActionState(GameplayAction.Up),
                 controll.GetActionState(GameplayAction.Down),
                 controll.GetActionState(GameplayAction.Left),
                 controll.GetActionState(GameplayAction.Right)
             );
-            movable.UpdatePosition();
+            Fire();
+        }
+
+        private void Fire()
+        {
+            if (LastFire != 0 && GlobalTimer.TotalTimeInSecods - LastFire <= TimeBetweenRounds)
+            {
+                return;
+            }
+            bool fired = false;
+            if (controll.GetActionState(GameplayAction.FireUp))
+            {
+                createProjectile(new Projectile(position.X, position.Y, 0, -ProjectileSpeed));
+                fired = true;
+            }
+            if (controll.GetActionState(GameplayAction.FireDown))
+            {
+                createProjectile(new Projectile(position.X, position.Y, 0, ProjectileSpeed));
+                fired = true;
+            }
+            if (controll.GetActionState(GameplayAction.FireLeft))
+            {
+                createProjectile(new Projectile(position.X, position.Y, -ProjectileSpeed, 0));
+                fired = true;
+            }
+            if (controll.GetActionState(GameplayAction.FireRight))
+            {
+                createProjectile(new Projectile(position.X, position.Y, ProjectileSpeed, 0));
+                fired = true;
+            }
+            if (fired)
+            {
+                LastFire = GlobalTimer.TotalTimeInSecods;
+            }
         }
 
         public Rect Shape
@@ -58,7 +104,8 @@ namespace Tanks
         {
             args.DrawingSession.FillRectangle(Shape, Microsoft.UI.Colors.White);
             args.DrawingSession.DrawText($"XSpeed: {movable.XSpeed}", 40, 40, Microsoft.UI.Colors.AliceBlue);
-            args.DrawingSession.DrawText($" YSpeed: {movable.YSpeed}", 40, 80, Microsoft.UI.Colors.AliceBlue);
+            args.DrawingSession.DrawText($"YSpeed: {movable.YSpeed}", 40, 80, Microsoft.UI.Colors.AliceBlue);
+            args.DrawingSession.DrawText($" FPS: {1 / GlobalTimer.ElapsedTimeInSeconds }", 40, 120, Microsoft.UI.Colors.AliceBlue);
         }
     }
 }

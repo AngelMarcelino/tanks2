@@ -12,12 +12,12 @@ namespace Tanks.Controlls
         public string PlayerId { get; set; }
         public Dictionary<VirtualKey, GameplayAction> inputKeyToGameplayActionMap { get; }
         
-        public KeyBindings()
+        public KeyBindings(Dictionary<VirtualKey, GameplayAction> mapping)
         {
-            inputKeyToGameplayActionMap = GetDefaultControls();
+            inputKeyToGameplayActionMap = mapping;
         }
-        
-        private Dictionary<VirtualKey, GameplayAction> GetDefaultControls()
+
+        public static Dictionary<VirtualKey, GameplayAction> GetDefaultControlsPlayer1()
         {
             return new Dictionary<VirtualKey, GameplayAction>
             {
@@ -30,6 +30,22 @@ namespace Tanks.Controlls
                 [VirtualKey.J] = GameplayAction.FireLeft,
                 [VirtualKey.L] = GameplayAction.FireRight,
                 [VirtualKey.Shift] = GameplayAction.Speed,
+            };
+        }
+
+        public static Dictionary<VirtualKey, GameplayAction> GetDefaultControlsPlayer2()
+        {
+            return new Dictionary<VirtualKey, GameplayAction>
+            {
+                [VirtualKey.T] = GameplayAction.Up,
+                [VirtualKey.G] = GameplayAction.Down,
+                [VirtualKey.F] = GameplayAction.Left,
+                [VirtualKey.H] = GameplayAction.Right,
+                [VirtualKey.W] = GameplayAction.FireUp,
+                [VirtualKey.S] = GameplayAction.FireDown,
+                [VirtualKey.A] = GameplayAction.FireLeft,
+                [VirtualKey.D] = GameplayAction.FireRight,
+                [VirtualKey.Z] = GameplayAction.Speed,
             };
         }
 

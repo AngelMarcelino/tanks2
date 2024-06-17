@@ -21,6 +21,17 @@ using Tanks.Controlls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
+public static class TightWait
+{
+    public static void Wait(TimeSpan duration)
+    {
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        while (stopwatch.Elapsed < duration)
+        {
+            Thread.SpinWait(1); // SpinWait reduces CPU usage compared to a simple loop
+        }
+    }
+}
 
 namespace Tanks
 {
@@ -47,7 +58,7 @@ namespace Tanks
                     Stopwatch sw = Stopwatch.StartNew();
                     env.UpdateState();
                     this.Canvas.Invalidate();
-                    Thread.Sleep(1);
+                    TightWait.Wait(TimeSpan.FromMilliseconds(1));
                     sw.Stop();
                     GlobalTimer.ElapsedTimeInSeconds = sw.Elapsed.TotalSeconds;
                 }
