@@ -12,14 +12,14 @@ using Windows.Media.Devices.Core;
 
 namespace Tanks
 {
-    class Tank
+    class Tank : ICollisionable
     {
         
-        public Position position { get; private set; }
+        public Position Position { get; private set; }
 
         public Movable movable { get; private set; }
 
-        public double Widht { get; set; } = 40;
+        public double Width { get; set; } = 40;
         public double Height { get; set; } = 40;
 
         public int FireRateInRoundsPerMinute { get; set; } = 300;
@@ -37,12 +37,12 @@ namespace Tanks
         public Tank(Controll controll, Rect space, Action<Projectile> createProjectile)
         {
             this.controll = controll;
-            this.position = new Position(space)
+            this.Position = new Position(space)
             {
                 X = 40,
                 Y = 40
             };
-            this.movable = new Movable(position);
+            this.movable = new Movable(Position);
             this.createProjectile = createProjectile;
         }
 
@@ -68,22 +68,22 @@ namespace Tanks
             bool fired = false;
             if (controll.GetActionState(GameplayAction.FireUp))
             {
-                createProjectile(new Projectile(position.X, position.Y, 0, -ProjectileSpeed));
+                createProjectile(new Projectile(Position.X, Position.Y, 0, -ProjectileSpeed));
                 fired = true;
             }
             if (controll.GetActionState(GameplayAction.FireDown))
             {
-                createProjectile(new Projectile(position.X, position.Y, 0, ProjectileSpeed));
+                createProjectile(new Projectile(Position.X, Position.Y, 0, ProjectileSpeed));
                 fired = true;
             }
             if (controll.GetActionState(GameplayAction.FireLeft))
             {
-                createProjectile(new Projectile(position.X, position.Y, -ProjectileSpeed, 0));
+                createProjectile(new Projectile(Position.X, Position.Y, -ProjectileSpeed, 0));
                 fired = true;
             }
             if (controll.GetActionState(GameplayAction.FireRight))
             {
-                createProjectile(new Projectile(position.X, position.Y, ProjectileSpeed, 0));
+                createProjectile(new Projectile(Position.X, Position.Y, ProjectileSpeed, 0));
                 fired = true;
             }
             if (fired)
@@ -96,7 +96,7 @@ namespace Tanks
         {
             get
             {
-                return new Rect(position.X, position.Y, Widht, Height);
+                return new Rect(Position.X, Position.Y, Width, Height);
             }
         }
 

@@ -50,7 +50,7 @@ namespace Tanks
         {
             Tank1.Draw(args);
             Tank2.Draw(args);
-            Projectiles.ToList().ForEach(projectile => projectile.Draw(args));
+            Projectiles.ForEach(projectile => projectile.Draw(args));
             args.DrawingSession.DrawText($"Numer of projectiles {Projectiles.Count}", 40, 160, Microsoft.UI.Colors.AliceBlue);
         }
     }
